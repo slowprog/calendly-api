@@ -2,6 +2,7 @@
     "name": "slowprog/calendly-api",
     "description": "Simple Calendly Library",
     "type": "library",
+    "license": "MIT",
     "authors": [
         {
             "name": "Andrey Tyshev",
