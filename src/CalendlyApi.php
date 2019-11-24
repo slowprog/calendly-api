@@ -167,8 +167,9 @@ class CalendlyApi
                 if ($e instanceof ClientException) {
                     $response = $e->getResponse();
                     $message  = (string)$response->getBody();
+                    $headers  = $response->getHeader('content-type');
 
-                    if (strpos($response->getHeader('content-type')[0], 'application/json') === 0) {
+                    if (count($headers) && strpos($headers[0], 'application/json') === 0) {
                         $message = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
                         $message = $message['message'];
                     }
@@ -179,7 +180,9 @@ class CalendlyApi
                 }
             }
 
-            if (strpos($response->getHeader('content-type')[0], 'application/json') === 0) {
+            $headers = $response->getHeader('content-type');
+
+            if (count($headers) && strpos($headers[0], 'application/json') === 0) {
                 $response = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
             }
         } catch (JsonException $e) {
