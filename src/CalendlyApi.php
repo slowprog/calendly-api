@@ -4,6 +4,7 @@ namespace Calendly;
 
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\RequestOptions;
 use JsonException;
 use Log;
 use GuzzleHttp\Client;
@@ -151,12 +152,12 @@ class CalendlyApi
         $url = sprintf('/api/v1/%s', $endpoint);
 
         $data = [
-            'query' => $params,
+            RequestOptions::QUERY => $params,
         ];
 
         if ($method != self::METHOD_GET) {
             $data = [
-                'form_params' => $params,
+                RequestOptions::JSON => $params,
             ];
         }
 
@@ -164,7 +165,7 @@ class CalendlyApi
             try {
                 $response = $this->client->request($method, $url, $data);
             } catch (GuzzleException $e) {
-                if ($e instanceof ClientException) {
+                if ($e instanceof ClientException && $e->getResponse()) {
                     $response = $e->getResponse();
                     $message  = (string)$response->getBody();
                     $headers  = $response->getHeader('content-type');
